@@ -7,7 +7,7 @@ from airflow.operators.dummy import DummyOperator
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date' : datetime(2022, 8, 8),
+    'start_date' : datetime(2022, 11, 14),
     'schedule_interval': "45 1 * * *",
     'email': ['tilin@wish.com'],
     'email_on_failure': True,
@@ -18,7 +18,7 @@ default_args = {
 }
 
 dag = DAG(
-    'test_air', default_args=default_args)
+    'test_air_3', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -49,7 +49,7 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
 
 end = DummyOperator(task_id='end', dag=dag)
 
-passing.set_upstream(start)
+#passing.set_upstream(start)
 wishpost_task_test.set_upstream(start)
-passing.set_downstream(end)
+#passing.set_downstream(end)
 wishpost_task_test.set_downstream(end)
