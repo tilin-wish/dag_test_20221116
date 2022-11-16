@@ -8,7 +8,7 @@ default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date' : datetime(2022, 8, 8),
-    'schedule_interval': "45 * * * *",
+    'schedule_interval': "45 1 * * *",
     'email': ['tilin@wish.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -18,11 +18,11 @@ default_args = {
 }
 
 dag = DAG(
-    'test2', default_args=default_args)
+    'test_air', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
-passing = KubernetesPodOperator(namespace='wishflow-wishpost',
+passing = KubernetesPodOperator(namespace='airflow',
                           image="python:3.6",
                           cmds=["python","-c"],
                           arguments=["print('hello world')"],
@@ -34,7 +34,7 @@ passing = KubernetesPodOperator(namespace='wishflow-wishpost',
                           dag=dag
                           )
 
-wishpost_task_test = KubernetesPodOperator(namespace='wishflow-wishpost',
+wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           image="harbor.infra.wish-cn.com/wish/wishpost@sha256:d9f0eea2fee8634636f0534d7e03d078be22070480ae71b3060c0be562de6db5",
                           #image="harbor.infra.wish-cn.com/wish/wishpost_payment_pipeline/base@sha256:ed9ee4780189e89c10715327ffe6e6cde7864afe4c35cf412000e7a261619644",
                           cmds=["python"],
@@ -43,7 +43,7 @@ wishpost_task_test = KubernetesPodOperator(namespace='wishflow-wishpost',
                           name="null-test",
                           task_id="wishpost-task-arg",
                           get_logs=True,
-                          is_delete_operator_pod=False,
+                          is_delete_operator_pod=True,
                           dag=dag
                           )
 
