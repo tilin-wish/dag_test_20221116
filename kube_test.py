@@ -18,7 +18,7 @@ default_args = {
 }
 
 dag = DAG(
-    'kubernetes_hello_world', default_args=default_args)
+    'test2', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -30,7 +30,7 @@ passing = KubernetesPodOperator(namespace='wishflow-wishpost',
                           name="passing-test",
                           task_id="passing-task",
                           get_logs=True,
-                          is_delete_operator_pod=True,
+                          is_delete_operator_pod=False,
                           dag=dag
                           )
 
