@@ -17,7 +17,6 @@ default_args = {
     'catchup': False,
     'retry_delay': timedelta(minutes=5)
 }
-k8s.Se
 dag = DAG(
     'test_air_3', default_args=default_args)
 
