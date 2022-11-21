@@ -32,7 +32,7 @@ passing = KubernetesPodOperator(namespace='airflow',
                           task_id="passing-task",
                           get_logs=True,
                           is_delete_operator_pod=False,
-                          volume_mounts=[],
+                          #volume_mounts=[],
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
                           dag=dag
                           )
@@ -48,7 +48,7 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           get_logs=True,
                           is_delete_operator_pod=False,
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
-                          volume_mounts=[k8s.V1VolumeMount(mount_path="/opt/vault/secrets", name="credential")],
+                          #volume_mounts=[k8s.V1VolumeMount(mount_path="/opt/vault/secrets", name="credential")],
                           dag=dag
                           )
 
