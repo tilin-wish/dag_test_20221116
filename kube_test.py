@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from airflow.operators.dummy import DummyOperator
 from kubernetes.client import CoreV1Api, models as k8s
-
+from airflow.kubernetes.secret import Secret
 
 default_args = {
     'owner': 'airflow',
@@ -17,7 +17,7 @@ default_args = {
     'catchup': False,
     'retry_delay': timedelta(minutes=5)
 }
-
+k8s.Se
 dag = DAG(
     'test_air_3', default_args=default_args)
 
@@ -49,6 +49,7 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           is_delete_operator_pod=False,
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
                           #volume_mounts=[k8s.V1VolumeMount(mount_path="/opt/vault/secrets", name="credential")],
+                          secret=[Secret('volume', '/opt/vault/secrets', 'credentials')],
                           dag=dag
                           )
 
