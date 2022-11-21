@@ -2,6 +2,7 @@ from airflow.models.dag import DAG
 from datetime import datetime, timedelta
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from airflow.operators.dummy import DummyOperator
+from kubernetes.client import CoreV1Api, models as k8s
 
 
 default_args = {
@@ -25,12 +26,14 @@ start = DummyOperator(task_id='start', dag=dag)
 passing = KubernetesPodOperator(namespace='airflow',
                           image="python:3.6",
                           cmds=["python","-c"],
-                          arguments=["print('hello world')"],
+                          arguments=["print('hello world');import time;time.sleep(99999)"],
                           labels={"foo": "bar"},
                           name="passing-test",
                           task_id="passing-task",
                           get_logs=True,
                           is_delete_operator_pod=False,
+                          volume_mounts=[],
+                          env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
                           dag=dag
                           )
 
@@ -43,7 +46,9 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           name="null-test",
                           task_id="wishpost-task-arg",
                           get_logs=True,
-                          is_delete_operator_pod=True,
+                          is_delete_operator_pod=False,
+                          env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
+                          volume_mounts=[k8s.V1VolumeMount(mount_path="/opt/vault/secrets", name="credential")],
                           dag=dag
                           )
 
