@@ -48,7 +48,7 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           is_delete_operator_pod=False,
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
                           #volume_mounts=[k8s.V1VolumeMount(mount_path="/opt/vault/secrets", name="credential")],
-                          secret=[Secret('volume', '/opt/vault/secrets', 'credentials')],
+                          secrets=[Secret('volume', '/opt/vault/secrets', 'credentials')],
                           dag=dag
                           )
 
