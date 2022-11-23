@@ -48,7 +48,7 @@ with DAG(
 
     run_this >> run_this_last
 
-    for i in range(3):
+    for i in range(1):
         task = BashOperator(
             task_id='runme_' + str(i),
             bash_command='echo "{{ task_instance_key_str }}" && sleep 1',
@@ -62,15 +62,6 @@ with DAG(
     )
     # [END howto_operator_bash_template]
     also_run_this >> run_this_last
-
-# [START howto_operator_bash_skip]
-this_will_skip = BashOperator(
-    task_id='this_will_skip',
-    bash_command='echo "hello world"; exit 99;',
-    dag=dag,
-)
-# [END howto_operator_bash_skip]
-this_will_skip >> run_this_last
 
 if __name__ == "__main__":
     dag.cli()
