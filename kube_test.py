@@ -43,7 +43,7 @@ simple_kube_task = KubernetesPodOperator(namespace='airflow',
                             limits={
                                 "cpu": 2,
                                 'memory': '200Mi',
-                            })
+                            }),
                           dag=dag
                           )
 
