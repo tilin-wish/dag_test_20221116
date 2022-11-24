@@ -1,0 +1,48 @@
+yaml_loader_kube_example:
+  default_args:
+    owner: 'tilin'
+    start_date: 2022-11-01 
+    retries: 1
+    retry_delay_sec: 300
+  schedule_interval: '0 3 * * *'
+  concurrency: 1
+  max_active_runs: 1
+  dagrun_timeout_sec: 60
+  default_view: 'tree' 
+  orientation: 'LR'  
+  description: 'this is kubernetes_pod_operator example'
+  tasks:
+    task_1:
+      operator: airflow.contrib.operators.kubernetes_pod_operator.KubernetesPodOperator
+      namespace: 'airflow'
+      image : 'python:3.6'
+      cmds : [
+        "python",
+        "-c"
+      ]
+      arguments : [
+         'print('hello world')',
+      ]
+      labels: {'foo': 'bar'}
+      name: 'kube-python-test'
+      task_id: 'kube-python-task'
+      get_logs: True
+
+    # task_2:
+    #   operator: airflow.contrib.operators.kubernetes_pod_operator.KubernetesPodOperator
+    #   namespace: 'airflow'
+    #   config_file : 'path_to_config_file'
+    #   image : 'image'
+    #   image_pull_policy : 'Always'
+    #   arguments : [
+    #      'arg1',
+    #      'arg2',
+    #      'arg3',
+    #   ]
+    #   labels: {'foo': 'bar'}
+    #   name: 'passing-test'
+    #   task_id: 'passing-task'
+    #   get_logs: True
+    #   in_cluster: False
+    #   dependencies: ['task_1']
+
