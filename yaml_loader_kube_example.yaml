@@ -12,6 +12,8 @@ yaml_loader_kube_example:
   orientation: 'LR'  
   description: 'this is kubernetes_pod_operator example'
   tasks:
+    task_start:
+      operator: airflow.operators.dummy.DummyOperator
     task_1:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       namespace: 'airflow'
@@ -28,21 +30,25 @@ yaml_loader_kube_example:
       task_id: 'kube-python-task'
       get_logs: True
 
-    # task_2:
-    #   operator: airflow.contrib.operators.kubernetes_pod_operator.KubernetesPodOperator
-    #   namespace: 'airflow'
-    #   config_file : 'path_to_config_file'
-    #   image : 'image'
-    #   image_pull_policy : 'Always'
-    #   arguments : [
-    #      'arg1',
-    #      'arg2',
-    #      'arg3',
-    #   ]
-    #   labels: {'foo': 'bar'}
-    #   name: 'passing-test'
-    #   task_id: 'passing-task'
-    #   get_logs: True
-    #   in_cluster: False
-    #   dependencies: ['task_1']
+    task_2:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      namespace: 'airflow'
+      image : 'harbor.infra.wish-cn.com/wish/wishpost@sha256:d9f0eea2fee8634636f0534d7e03d078be22070480ae71b3060c0be562de6db5'
+      cmds : [
+        "python",
+      ]
+      arguments : [
+         "/home/app/wishpost/scripts/test/heavy_memory_test.py",
+      ]
+      env_vars: {"DB_SECRETS_FILE" : "/opt/vault/secrets/db_credentials"}
+      labels: {'foo': 'bar'}
+      name: 'kube-wishpostapp-test'
+      task_id: 'kube-wishpostapp-task'
+      get_logs: True
+      dependencies: ['task_start']
+    task_end:
+      operator: airflow.operators.dummy.DummyOperator
+      dependencies: ['task_1', 'task_2']
+
+
 
