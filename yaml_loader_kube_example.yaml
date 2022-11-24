@@ -21,7 +21,7 @@ yaml_loader_kube_example:
       #   "-c"
       # ]
       arguments : [
-         'print('hello world')'
+         "print('hello world')",
       ]
       labels: {'foo': 'bar'}
       name: 'kube-python-test'
