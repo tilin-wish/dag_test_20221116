@@ -16,10 +16,10 @@ yaml_loader_kube_example:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       namespace: 'airflow'
       image : 'python:3.6'
-      # cmds : [
-      #   "python",
-      #   "-c"
-      # ]
+      cmds : [
+        "python",
+        "-c",
+      ]
       arguments : [
          "print('hello world')",
       ]
