@@ -13,13 +13,13 @@ yaml_loader_kube_example:
   description: 'this is kubernetes_pod_operator example'
   tasks:
     task_1:
-      operator: airflow.contrib.operators.kubernetes_pod_operator.KubernetesPodOperator
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       namespace: 'airflow'
       image : 'python:3.6'
-      cmds : [
-        "python",
-        "-c"
-      ]
+      # cmds : [
+      #   "python",
+      #   "-c"
+      # ]
       arguments : [
          'print('hello world')',
       ]
