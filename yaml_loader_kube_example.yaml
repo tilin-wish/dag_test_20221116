@@ -36,9 +36,10 @@ yaml_loader_kube_example:
       image : 'harbor.infra.wish-cn.com/wish/wishpost@sha256:d9f0eea2fee8634636f0534d7e03d078be22070480ae71b3060c0be562de6db5'
       cmds : [
         "python",
+        "-c",
       ]
       arguments : [
-         "/home/app/wishpost/scripts/test/heavy_memory_test.py",
+         "print('hello world')",
       ]
       env_vars: {"DB_SECRETS_FILE" : "/opt/vault/secrets/db_credentials"}
       labels: {'foo': 'bar'}
