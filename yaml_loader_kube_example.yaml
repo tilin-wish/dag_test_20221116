@@ -41,6 +41,9 @@ yaml_loader_kube_example:
       arguments : [
          "print('hello world')",
       ]
+      secrets:  [
+        {"secret":"wishflow-wishpost-credential","deploy_type":"volume","deploy_target":"/opt/vault/secrets"}
+      ]
       env_vars: {"DB_SECRETS_FILE" : "/opt/vault/secrets/db_credentials"}
       labels: {'foo': 'bar'}
       name: 'kube-wishpostapp-test'

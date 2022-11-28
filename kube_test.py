@@ -20,7 +20,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'kube_dag_example', default_args=default_args)
+    'plain_kube_example', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -52,8 +52,8 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           cmds=["python"],
                           arguments=["/home/app/wishpost/scripts/test/heavy_memory_test.py"],
                           labels={"foo": "bar"},
-                          name="wishpost-task-test",
-                          task_id="wishpost-task-arg",
+                          name="wishpost-test",
+                          task_id="wishpost-task",
                           get_logs=True,
                           is_delete_operator_pod=False,
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
