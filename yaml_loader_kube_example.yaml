@@ -41,7 +41,7 @@ yaml_loader_kube_example:
         "-c",
       ]
       arguments : [
-         "print('hello world')",
+         "print('{{ ds }}')",
       ]
       # secrets:  [
       #   {"secret":"wishflow-wishpost-credential","deploy_type":"volume","deploy_target":"/opt/vault/secrets"}
