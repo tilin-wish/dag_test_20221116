@@ -29,6 +29,8 @@ yaml_loader_kube_example:
       name: 'kube-python-test'
       task_id: 'kube-python-task'
       get_logs: True
+      dependencies: ['task_start']
+
 
     task_2:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
