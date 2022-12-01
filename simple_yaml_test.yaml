@@ -1,11 +1,11 @@
-yaml_loader_bashoperator_example:
+yaml_loader_bash_example:
   default_args:
     owner: 'example_owner'
-    start_date: 2022-11-01 
+    start_date: 2022-11-15 
     #end_date: 2022-11-05
     retries: 1
     retry_delay_sec: 300
-  schedule_interval: '0 3 * * *'
+  schedule_interval: '0 0 * * *'
   concurrency: 1
   max_active_runs: 1
   dagrun_timeout_sec: 60
@@ -18,7 +18,7 @@ yaml_loader_bashoperator_example:
       bash_command: 'echo {{ ds }}'
     task_2:
       operator: airflow.operators.bash_operator.BashOperator
-      bash_command: 'echo 2'
+      bash_command: 'echo {{ ts_nodash }}'
       dependencies: [task_1]
     task_3:
       operator: airflow.operators.bash_operator.BashOperator
