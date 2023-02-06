@@ -21,7 +21,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube21', default_args=default_args)
+    'plain_kube22', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -56,8 +56,8 @@ full_pod_spec = k8s.V1Pod(
   )
 
 wishpost_task_test = KubernetesPodOperator(namespace='airflow',
-                          #image="harbor.infra.wish-cn.com/wish/wishpost@sha256:d9f0eea2fee8634636f0534d7e03d078be22070480ae71b3060c0be562de6db5",
-                          image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:803f50dd630ad4e4d8fb218297ecf9fe05b53bcf8195ffb77377cf0744e42355",
+                            image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4",
+                          #image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:803f50dd630ad4e4d8fb218297ecf9fe05b53bcf8195ffb77377cf0744e42355",
                           #image="harbor.infra.wish-cn.com/wish/wishpost-airflow:bff81de-20221226031202_MKL-68756",
                           cmds=["python", "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"],
                           #cmds=["python", "-c", "import time;time.sleep(300)"],
