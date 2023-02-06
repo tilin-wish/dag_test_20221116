@@ -33,6 +33,7 @@ spec:
         #     name: {{ template "mychart.fullname" . }}-env
       image: dummy_image
       name: base
+      labels: {'tmp': 'teest'}
       ports: []
       # volumeMounts:
       #   - name: wishflow-config
