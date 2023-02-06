@@ -21,7 +21,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube18', default_args=default_args)
+    'plain_kube19', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -67,6 +67,7 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                            "--s3_bucket=wishpost-data",
                             "--task_id=MongoDumpMerchantOrderDaily",
                             "--s3_uri_prefix=tahoe/wishpost/wishpost_merchant_order",
+                            "--env=be_qa",
                             "--freq=daily"],
                           #labels={"ttt": "eee"},
                           name=job_name,
