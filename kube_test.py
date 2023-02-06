@@ -10,7 +10,7 @@ from airflow.kubernetes.secret import Secret
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date' : datetime(2023, 1, 30),
+    'start_date' : datetime(2023, 2, 5),
     'schedule_interval': "45 1 * * *",
     'email': ['tilin@wish.com'],
     'email_on_failure': True,
