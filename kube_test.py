@@ -20,7 +20,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube11', default_args=default_args)
+    'plain_kube12', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -65,7 +65,7 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           name="mongo_dump-test",
                           task_id="mongo_dump-task",
                           get_logs=True,
-                          pod_template_file="/opt/airflow/dags/pod_template_files/wishpost_template.yaml",
+                          pod_template_file="/opt/airflow/dags/repo/pod_template_files/wishpost_template.yaml",
                           #is_delete_operator_pod=True,
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
                           #volume_mounts=[k8s.V1VolumeMount(mount_path="/opt/vault/secrets", name="credential")],
