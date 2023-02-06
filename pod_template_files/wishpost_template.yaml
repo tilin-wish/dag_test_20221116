@@ -4,6 +4,7 @@ kind: Pod
 metadata:
   name: daguploader
 spec:
+  serviceAccountName: airflow-worker
   # initContainers:
   #   - name: init-container
   #     image: "python:3.6"
@@ -16,19 +17,19 @@ spec:
   #       requests:
   #         cpu: 500m
   #         memory: 1Gi
-  serviceAccount:
-    # Specifies whether a ServiceAccount should be created
-    create: true
-    # The name of the ServiceAccount to use.
-    # If not set and create is true, a name is generated using the release name
-    name: ~
+  # serviceAccount:
+  #   # Specifies whether a ServiceAccount should be created
+  #   create: true
+  #   # The name of the ServiceAccount to use.
+  #   # If not set and create is true, a name is generated using the release name
+  #   name: ~
 
-    # Annotations to add to worker kubernetes service account.
-    #annotations: {}
-    annotations:
-      eks.amazonaws.com/role-arn: arn:aws-cn:iam::662914226203:role/qa/WishPost_QA
-      eks.amazonaws.com/audience: sts.amazonaws.com.cn
-      
+  #   # Annotations to add to worker kubernetes service account.
+  #   #annotations: {}
+  #   annotations:
+  #     eks.amazonaws.com/role-arn: arn:aws-cn:iam::662914226203:role/qa/WishPost_QA
+  #     eks.amazonaws.com/audience: sts.amazonaws.com.cn
+
   containers:
     - name: base
       command: ["python", "-c"]
