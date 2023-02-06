@@ -1,3 +1,4 @@
+import uuid
 from airflow.models.dag import DAG
 from datetime import datetime, timedelta
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
@@ -20,7 +21,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube12', default_args=default_args)
+    'plain_kube13', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -47,29 +48,38 @@ simple_kube_task = KubernetesPodOperator(namespace='airflow',
                           dag=dag
                           )
 
+job_name = "k8s-job"
+meta_name = 'k8s-pod-' + uuid.uuid4().hex
+metadata = k8s.V1ObjectMeta(name=(meta_name))
+full_pod_spec = k8s.V1Pod(
+    metadata=metadata,
+  )
+
 wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           #image="harbor.infra.wish-cn.com/wish/wishpost@sha256:d9f0eea2fee8634636f0534d7e03d078be22070480ae71b3060c0be562de6db5",
-                          image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:803f50dd630ad4e4d8fb218297ecf9fe05b53bcf8195ffb77377cf0744e42355",
+                          #image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:803f50dd630ad4e4d8fb218297ecf9fe05b53bcf8195ffb77377cf0744e42355",
                           #image="harbor.infra.wish-cn.com/wish/wishpost-airflow:bff81de-20221226031202_MKL-68756",
-                          cmds=["python", "-c"],
+                          #cmds=["python", "-c"],
                           #"/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"],
                           #arguments=["/home/app/wishpost/scripts/test/heavy_memory_test.py"],
-                          arguments=["import time;time.sleep(300);"],
+                          #arguments=["import time;time.sleep(300);"],
                         #   arguments=["--date=20221130T000000",
                         #    "--c_name=MerchantOrder",
                         #    "--s3_bucket=wishpost-data",
                         #     "--task_id=MongoDumpMerchantOrderDaily",
                         #     "--s3_uri_prefix=tahoe/wishpost/wishpost_merchant_order",
                         #     "--freq=daily"],
-                          labels={"ttt": "eee"},
-                          name="mongo_dump-test",
-                          task_id="mongo_dump-task",
+                          #labels={"ttt": "eee"},
+                          name=job_name,
+                          task_id=job_name,
+                          full_pod_spec=full_pod_spec,
+                          #task_id="mongo_dump-task",
                           get_logs=True,
                           pod_template_file="/opt/airflow/dags/repo/pod_template_files/wishpost_template.yaml",
                           #is_delete_operator_pod=True,
-                          env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
+                          #env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
                           #volume_mounts=[k8s.V1VolumeMount(mount_path="/opt/vault/secrets", name="credential")],
-                          secrets=[Secret('volume', '/opt/vault/secrets', 'wishflow-wishpost-credential')],
+                          #secrets=[Secret('volume', '/opt/vault/secrets', 'wishflow-wishpost-credential')],
                           dag=dag
                           )
 

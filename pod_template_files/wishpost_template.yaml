@@ -1,82 +1,41 @@
+---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: dummy-name
-  #{{- with .Values.podTemplate.podAnnotations }}
-  #annotations:
-  #  {{- toYaml . | nindent 8 }}
-  annotations: 
-    eks.amazonaws.com/role-arn: arn:aws-cn:iam::662914226203:role/qa/JobPlatform_QA
-    eks.amazonaws.com/audience: sts.amazonaws.com.cn
-  #{{- end }}
+  name: daguploader
 spec:
-  #serviceAccountName: {{ .Values.serviceAccount.name }}
-  securityContext:
-    fsGroup: 2000
+  initContainers:
+    - name: init-container
+      image: "python:3.6"
+      command: ["python", "-c"]
+      args: ["print('hello world')"]
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
+
   containers:
-    - args: []
-      command: []
-      # env:
-      #   - name: AIRFLOW__CORE__EXECUTOR
-      #     value: LocalExecutor
-      #   - name: AIRFLOW_CONFIG
-      #     value: /production/wishflow/config/wishflow.cfg
-      #   - name: AIRFLOW__KUBERNETES__NAMESPACE
-      #     value: {{ include "mychart.namespace" . }}
-      #   - name: AIRFLOW__KUBERNETES__POD_TEMPLATE_FILE
-      #     value: /production/wishflow/config/pod.yaml
-      #   {{- with .Values.podTemplate.env }}
-      #     {{- toYaml . | nindent 12 }}
-      #   {{- end }}
-      #envFrom:
-        # - secretRef:
-        #     name: {{ template "mychart.fullname" . }}-env
-      image: dummy_image
-      name: base
-      labels: {'tmp': 'teest'}
+    - name: base
+      command: ["python", "-c"]
+      args: ["print('hello world')"]
+      image: "python:3.6"
+      imagePullPolicy: IfNotPresent
       ports: []
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
       # volumeMounts:
-      #   - name: wishflow-config
-      #     mountPath: /production/wishflow/config/wishflow.cfg
-      #     subPath: wishflow.cfg
-      #   - name: wishflow-config
-      #     mountPath: /production/wishflow/config/subject_template.cfg
-      #     subPath: subject_template.cfg
-      #   - name: pod-template
-      #     mountPath: /production/wishflow/config/pod.yaml
-      #     subPath: pod-template.yaml
-      #   {{- if .Values.podTemplate.credential.enabled }}
-      #   - name: credential
-      #     mountPath: {{ .Values.podTemplate.credential.hostPath }}
-      #     readOnly: true
-      #   {{- end}}
-      #resources:
-      #  {{- toYaml .Values.podTemplate.resources | nindent 12 }}
+      #   - name: shared-volume
+      #     mountPath: "/tmp/mnt"
+  #hostNetwork: false
   restartPolicy: Never
-  # nodeSelector:
-  #   {}
-  # {{- with .Values.podTemplate.affinity }}
-  # affinity:
-  #   {{- toYaml . | nindent 8 }}
-  # {{- end }}
-  # {{- with .Values.podTemplate.tolerations }}
-  # tolerations:
-  #   {{- toYaml . | nindent 8 }}
-  # {{- end }}
   # volumes:
-  #   - configMap:
-  #       name: {{ template "mychart.fullname" . }}-config
-  #       items:
-  #         - key: wishflow.cfg
-  #           path: wishflow.cfg
-  #         - key: subject_template.cfg
-  #           path: subject_template.cfg
-  #     name: wishflow-config
-  #   - configMap:
-  #       name: {{ template "mychart.fullname" . }}-pod-template
-  #     name: pod-template
-  #   {{- if .Values.podTemplate.credential.enabled }}
-  #   - name: credential
-  #     secret:
-  #       secretName: {{ .Values.podTemplate.credential.name }}
-  #   {{- end}}
+  # - name: shared-volume
+  #   emptyDir: {}
