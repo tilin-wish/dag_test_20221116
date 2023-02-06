@@ -20,7 +20,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube3', default_args=default_args)
+    'plain_kube9', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -32,7 +32,7 @@ simple_kube_task = KubernetesPodOperator(namespace='airflow',
                           name="simple-kube-test",
                           task_id="simple-kube-task",
                           get_logs=True,
-                          is_delete_operator_pod=False,
+                          is_delete_operator_pod=True,
                           #volume_mounts=[],
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
                           resources=V1ResourceRequirements(
@@ -64,7 +64,8 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           name="mongo_dump-test",
                           task_id="mongo_dump-task",
                           get_logs=True,
-                          is_delete_operator_pod=False,
+                          pod_template_file="./pod_template_files/wishpost_template.yaml",
+                          #is_delete_operator_pod=True,
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
                           #volume_mounts=[k8s.V1VolumeMount(mount_path="/opt/vault/secrets", name="credential")],
                           secrets=[Secret('volume', '/opt/vault/secrets', 'wishflow-wishpost-credential')],
