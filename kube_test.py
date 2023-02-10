@@ -15,13 +15,13 @@ default_args = {
     'schedule_interval': "45 1 * * *",
     'email': ['tilin@wish.com'],
     'email_on_failure': True,
-    'email_on_retry': False,
+    'email_on_retry': True,
     'retries': 1,
     'catchup': True,
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube24', default_args=default_args)
+    'plain_kube25', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 

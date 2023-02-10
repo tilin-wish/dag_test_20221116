@@ -44,6 +44,23 @@ spec:
         requests:
           cpu: 500m
           memory: 1Gi
+      env:
+        - name: AIRFLOW__SMTP__SMTP_HOST
+          value: 'smtp.sendgrid.net'
+        - name: AIRFLOW__SMTP__SMTP_STARTTLS
+          value: 'True'
+        - name: AIRFLOW__SMTP__SMTP_SSL
+          value: 'False'
+        - name: AIRFLOW__SMTP__SMTP_USER
+          value: 'apikey'
+        - name: AIRFLOW__SMTP__SMTP_MAIL_FROM
+          value: 'airflow-notifications@wish.com'  
+        - name: AIRFLOW__SMTP__SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: wishflow-wishpost-credential
+              key: sendgrid_password
+        
       # volumeMounts:
       #   - name: shared-volume
       #     mountPath: "/tmp/mnt"
