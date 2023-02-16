@@ -14,4 +14,4 @@ _cur_path = os.path.dirname(os.path.abspath(__file__))
 # dag_factory2.generate_dags(globals())
 from dagfactory import load_yaml_dags
 
-load_yaml_dags(globals_dict=globals())
+load_yaml_dags(globals_dict=globals(), suffix=['.yaml'])
