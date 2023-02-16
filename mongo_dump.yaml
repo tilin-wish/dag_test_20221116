@@ -1,4 +1,4 @@
-mongo_dump_yaml98:
+mongo_dump_yaml97:
   default_args:
     owner: 'tilin'
     start_date: 2023-02-15 
@@ -13,7 +13,13 @@ mongo_dump_yaml98:
   orientation: 'LR'  
   description: 'this is an example mongo_dump'
   tasks:
+    
     task_1:
+      operator: airflow.operators.bash_operator.BashOperator
+      bash_command: 'echo {{ ts_nodash }}'
+      #dependencies: [task_1]
+    
+    task_dump:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       namespace: 'airflow'
       image: 'harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4'
@@ -21,6 +27,7 @@ mongo_dump_yaml98:
         "python", 
         "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"
       ]
+
       arguments : [
         "--date=20221130T000000",
         "--c_name=MerchantOrder",
@@ -33,14 +40,11 @@ mongo_dump_yaml98:
       ]
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/wishpost_template.yaml'
       get_logs: True
-
-
-    task_2:
-      operator: airflow.operators.bash_operator.BashOperator
-      bash_command: 'echo {{ ts_nodash }}'
       dependencies: [task_1]
+
+
     task_3:
       operator: airflow.operators.bash_operator.BashOperator
       bash_command: 'echo 3'
-      dependencies: [task_1]
+      dependencies: [task_2]
 
