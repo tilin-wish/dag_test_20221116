@@ -44,7 +44,17 @@ spec:
         requests:
           cpu: 500m
           memory: 1Gi
+      volumes:
+        - name: credential
+          secret:
+            secretName: wishflow-wishpost-credential   
+      volumeMounts:
+        - name: credential
+          mountPath: '/opt/vault/secrets'
+          readOnly: true
       env:
+        - name: DB_SECRETS_FILE
+          value: '/opt/vault/secrets/db_credentials'
         - name: AIRFLOW__SMTP__SMTP_HOST
           value: 'smtp.sendgrid.net'
         - name: AIRFLOW__SMTP__SMTP_STARTTLS
