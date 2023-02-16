@@ -1,4 +1,4 @@
-mongo_dump_yaml95:
+mongo_dump_yaml94:
   default_args:
     owner: 'tilin'
     start_date: 2023-02-15 
@@ -8,7 +8,6 @@ mongo_dump_yaml95:
   schedule_interval: '0 0 * * *'
   concurrency: 1
   max_active_runs: 1
-  dagrun_timeout_sec: 60
   default_view: 'tree' 
   orientation: 'LR'  
   description: 'this is an example mongo_dump'
