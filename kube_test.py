@@ -21,7 +21,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'mongo_dump_plain96', default_args=default_args)
+    'mongo_dump_plain95', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
