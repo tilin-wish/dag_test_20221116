@@ -1,7 +1,7 @@
 yaml_loader_bash_example:
   default_args:
     owner: 'example_owner'
-    start_date: 2022-11-15 
+    start_date: 2023-02-15 
     #end_date: 2022-11-05
     retries: 1
     retry_delay_sec: 300
