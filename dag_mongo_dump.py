@@ -26,6 +26,7 @@ with DAG(dag_id="dag_mongo_dump99", default_args = default_args) as dag:
     task_02 = BashOperator(task_id='task_02', bash_command="echo {{ ts_nodash }}")
 
     task_dump = KubernetesPodOperator(namespace='airflow',
+        task_id='task_dump',
         cmds=["python", "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"],
         arguments=["--date=20221230T000000",
         "--c_name=MerchantOrder",
