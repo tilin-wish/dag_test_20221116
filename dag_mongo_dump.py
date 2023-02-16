@@ -20,7 +20,7 @@ default_args = {
     'catchup': True
 }
 
-with DAG(dag_id="dag_mongo_dump98", default_args = default_args) as dag:
+with DAG(dag_id="dag_mongo_dump888", default_args = default_args) as dag:
 
     task_01 = BashOperator(task_id='task_01', bash_command="echo {{ ts_nodash }}")
     task_02 = BashOperator(task_id='task_02', bash_command="echo {{ ts_nodash }}")
@@ -38,8 +38,6 @@ with DAG(dag_id="dag_mongo_dump98", default_args = default_args) as dag:
         "--freq=daily"],
         get_logs=True,
         pod_template_file="/opt/airflow/dags/repo/pod_template_files/wishpost_template.yaml",
-        env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
-        #secrets=[Secret('volume', '/opt/vault/secrets', 'wishflow-wishpost-credential')],
         )
 
     task_final = BashOperator(task_id='task_final', bash_command="echo {{ ts_nodash }}")
