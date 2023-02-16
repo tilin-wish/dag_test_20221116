@@ -44,14 +44,11 @@ spec:
         requests:
           cpu: 500m
           memory: 1Gi
-      # volumes:
-      #   - name: credential
-      #     secret:
-      #       secretName: wishflow-wishpost-credential   
-      # volumeMounts:
-      #   - name: credential
-      #     mountPath: '/opt/vault/secrets'
-      #     readOnly: true
+         
+      volumeMounts:
+        - name: credential
+          mountPath: '/opt/vault/secrets'
+          readOnly: true
       env:
         - name: DB_SECRETS_FILE
           value: '/opt/vault/secrets/db_credentials'
@@ -76,6 +73,10 @@ spec:
       #     mountPath: "/tmp/mnt"
   #hostNetwork: false
   restartPolicy: Never
+  volumes:
+    - name: credential
+      secret:
+        secretName: wishflow-wishpost-credential
   # volumes:
   # - name: shared-volume
   #   emptyDir: {}
