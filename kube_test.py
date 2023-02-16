@@ -21,7 +21,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'mongo_dump_plain97', default_args=default_args)
+    'mongo_dump_plain96', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -35,16 +35,7 @@ simple_kube_task = KubernetesPodOperator(namespace='airflow',
                           get_logs=True,
                           is_delete_operator_pod=True,
                           #volume_mounts=[],
-                          env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
-                          # resources=V1ResourceRequirements(
-                          #   requests={
-                          #       "cpu": 1,
-                          #       'memory': '100Mi'
-                          #   },
-                          #   limits={
-                          #       "cpu": 2,
-                          #       'memory': '200Mi',
-                          #   }),
+                          env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},                          
                           dag=dag
                           )
 
