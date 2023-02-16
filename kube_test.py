@@ -17,8 +17,7 @@ default_args = {
     'email_on_failure': True,
     'email_on_retry': True,
     'retries': 1,
-    'catchup': True,
-    'retry_delay': timedelta(minutes=5)
+    'catchup': True
 }
 dag = DAG(
     'mongo_dump_plain95', default_args=default_args)

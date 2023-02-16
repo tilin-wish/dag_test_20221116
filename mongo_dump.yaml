@@ -4,8 +4,13 @@ mongo_dump_yaml94:
     start_date: 2023-02-15 
     #end_date: 2022-11-05
     retries: 1
-    retry_delay_sec: 300
-  schedule_interval: '0 0 * * *'
+    email: [
+      'tilin@wish.com'
+    ]
+    email_on_failure: 'True'
+    email_on_retry: 'True'
+    catchup: 'True'
+  schedule_interval: '45 1 * * *'
   concurrency: 1
   max_active_runs: 1
   default_view: 'tree' 
@@ -13,10 +18,13 @@ mongo_dump_yaml94:
   description: 'this is an example mongo_dump'
   tasks:
     
-    task_1:
+    task_01:
       operator: airflow.operators.bash_operator.BashOperator
       bash_command: 'echo {{ ts_nodash }}'
-      #dependencies: [task_1]
+    
+    task_02:
+      operator: airflow.operators.bash_operator.BashOperator
+      bash_command: 'echo {{ ts_nodash }}'
     
     task_dump:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
@@ -26,7 +34,6 @@ mongo_dump_yaml94:
         "python", 
         "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"
       ]
-      #default_task_execution_timeout: 3600
       arguments : [
         "--date=20221130T000000",
         "--c_name=MerchantOrder",
@@ -39,10 +46,10 @@ mongo_dump_yaml94:
       ]
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/wishpost_template.yaml'
       get_logs: True
-      dependencies: [task_1]
+      dependencies: [task_01, task_02]
 
 
-    task_3:
+    task_final:
       operator: airflow.operators.bash_operator.BashOperator
       bash_command: 'echo {{ ds }}'
       dependencies: [task_dump]
