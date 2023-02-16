@@ -27,8 +27,7 @@ mongo_dump_yaml96:
         "python", 
         "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"
       ]
-      timeout: 3600
-
+      default_task_execution_timeout: 3600
       arguments : [
         "--date=20221130T000000",
         "--c_name=MerchantOrder",
