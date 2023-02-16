@@ -22,8 +22,8 @@ default_args = {
 
 with DAG(dag_id="dag_mongo_dump99", default_args = default_args) as dag:
 
-    task_01 = BashOperator(bash_command="echo {{ ts_nodash }}")
-    task_02 = BashOperator(bash_command="echo {{ ts_nodash }}")
+    task_01 = BashOperator(task_id='task_01', bash_command="echo {{ ts_nodash }}")
+    task_02 = BashOperator(task_id='task_02', bash_command="echo {{ ts_nodash }}")
 
     task_dump = KubernetesPodOperator(namespace='airflow',
         cmds=["python", "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"],
@@ -41,7 +41,7 @@ with DAG(dag_id="dag_mongo_dump99", default_args = default_args) as dag:
         secrets=[Secret('volume', '/opt/vault/secrets', 'wishflow-wishpost-credential')],
         )
 
-    task_final = BashOperator(bash_command="echo {{ ts_nodash }}")
+    task_final = BashOperator(task_id='task_final', bash_command="echo {{ ts_nodash }}")
 
     [task_01, task_02] >> task_dump >> task_final
 
