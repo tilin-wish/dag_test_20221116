@@ -21,12 +21,12 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube2', default_args=default_args)
+    'mongo_dump_plain99', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
 simple_kube_task = KubernetesPodOperator(namespace='airflow',
-                          image="python:3.6",
+                          image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4",
                           cmds=["python","-c"],
                           arguments=["print('hello world')"],
                           labels={"foo": "bar"},
@@ -36,15 +36,15 @@ simple_kube_task = KubernetesPodOperator(namespace='airflow',
                           is_delete_operator_pod=True,
                           #volume_mounts=[],
                           env_vars={"DB_SECRETS_FILE":"/opt/vault/secrets/db_credentials"},
-                          resources=V1ResourceRequirements(
-                            requests={
-                                "cpu": 1,
-                                'memory': '100Mi'
-                            },
-                            limits={
-                                "cpu": 2,
-                                'memory': '200Mi',
-                            }),
+                          # resources=V1ResourceRequirements(
+                          #   requests={
+                          #       "cpu": 1,
+                          #       'memory': '100Mi'
+                          #   },
+                          #   limits={
+                          #       "cpu": 2,
+                          #       'memory': '200Mi',
+                          #   }),
                           dag=dag
                           )
 
@@ -63,7 +63,7 @@ wishpost_task_test = KubernetesPodOperator(namespace='airflow',
                           #cmds=["python", "-c", "import time;time.sleep(300)"],
                           #arguments=["/home/app/wishpost/scripts/test/heavy_memory_test.py"],
                           #arguments=["import time;time.sleep(300);"],
-                          arguments=["--date=20221130T000000",
+                          arguments=["--date=20221230T000000",
                            "--c_name=MerchantOrder",
                            "--s3_bucket=wishpost-data",
                             "--task_id=MongoDumpMerchantOrderDaily",
