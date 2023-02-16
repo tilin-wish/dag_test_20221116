@@ -1,4 +1,4 @@
-mongo_dump_yaml96:
+mongo_dump_yaml95:
   default_args:
     owner: 'tilin'
     start_date: 2023-02-15 
@@ -45,6 +45,6 @@ mongo_dump_yaml96:
 
     task_3:
       operator: airflow.operators.bash_operator.BashOperator
-      bash_command: 'echo 3'
+      bash_command: 'echo {{ ds }}'
       dependencies: [task_dump]
 

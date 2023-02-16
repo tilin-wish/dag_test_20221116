@@ -61,7 +61,7 @@ spec:
         - name: AIRFLOW__SMTP__SMTP_USER
           value: 'apikey'
         - name: AIRFLOW__CORE__default_task_execution_timeout
-          value: 3600
+          value: '3600'
         - name: AIRFLOW__SMTP__SMTP_MAIL_FROM
           value: 'airflow-notifications@wish.com'  
         - name: AIRFLOW__SMTP__SMTP_PASSWORD
