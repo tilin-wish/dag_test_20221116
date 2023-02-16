@@ -21,17 +21,17 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'mongo_dump_plain99', default_args=default_args)
+    'mongo_dump_plain98', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
 simple_kube_task = KubernetesPodOperator(namespace='airflow',
-                          image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4",
+                          #image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4",
                           cmds=["python","-c"],
                           arguments=["print('hello world')"],
                           labels={"foo": "bar"},
-                          name="simple-kube-test",
-                          task_id="simple-kube-task",
+                          name="print_hello",
+                          task_id="print_hello_task",
                           get_logs=True,
                           is_delete_operator_pod=True,
                           #volume_mounts=[],

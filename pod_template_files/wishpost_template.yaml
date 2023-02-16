@@ -34,7 +34,9 @@ spec:
     - name: base
       command: ["python", "-c"]
       args: ["import time;time.sleep(300);print('hello world');"]
-      image: "python:3.6"
+      image:
+        repository: harbor.infra.wish-cn.com/wish/wishpost-airflow
+        tag: 7c9cb71-20230202044005_master
       imagePullPolicy: IfNotPresent
       ports: []
       resources:
