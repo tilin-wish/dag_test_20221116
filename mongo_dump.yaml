@@ -15,6 +15,7 @@ mongo_dump:
   tasks:
     task_1:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      namespace: 'airflow'
       image: 'harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4'
       cmds: [ 
         "python", 
@@ -31,6 +32,8 @@ mongo_dump:
         "--freq=daily",
       ]
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/wishpost_template.yaml'
+      get_logs: True
+
 
     task_2:
       operator: airflow.operators.bash_operator.BashOperator
