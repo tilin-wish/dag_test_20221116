@@ -46,5 +46,5 @@ mongo_dump_yaml97:
     task_3:
       operator: airflow.operators.bash_operator.BashOperator
       bash_command: 'echo 3'
-      dependencies: [task_2]
+      dependencies: [task_dump]
 
