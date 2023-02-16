@@ -21,12 +21,12 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'mongo_dump_plain98', default_args=default_args)
+    'mongo_dump_plain97', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
 simple_kube_task = KubernetesPodOperator(namespace='airflow',
-                          #image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4",
+                          image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4",
                           cmds=["python","-c"],
                           arguments=["print('hello world')"],
                           labels={"foo": "bar"},
@@ -56,7 +56,7 @@ full_pod_spec = k8s.V1Pod(
   )
 
 wishpost_task_test = KubernetesPodOperator(namespace='airflow',
-                            image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4",
+                          #image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4",
                           #image="harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:803f50dd630ad4e4d8fb218297ecf9fe05b53bcf8195ffb77377cf0744e42355",
                           #image="harbor.infra.wish-cn.com/wish/wishpost-airflow:bff81de-20221226031202_MKL-68756",
                           cmds=["python", "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"],
