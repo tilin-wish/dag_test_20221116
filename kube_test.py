@@ -11,7 +11,7 @@ from airflow.kubernetes.secret import Secret
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date' : datetime(2023, 2, 13),
+    'start_date' : datetime(2023, 2, 15),
     'schedule_interval': "45 1 * * *",
     'email': ['tilin@wish.com'],
     'email_on_failure': True,
@@ -21,7 +21,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube5', default_args=default_args)
+    'plain_kube2', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
