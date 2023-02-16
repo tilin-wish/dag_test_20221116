@@ -21,7 +21,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 dag = DAG(
-    'plain_kube25', default_args=default_args)
+    'plain_kube5', default_args=default_args)
 
 start = DummyOperator(task_id='start', dag=dag)
 
