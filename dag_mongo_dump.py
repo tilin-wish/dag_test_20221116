@@ -20,7 +20,7 @@ default_args = {
     'catchup': True
 }
 
-with DAG(dag_id="mongo_dump_py888", default_args = default_args) as dag:
+with DAG(dag_id="mongo_dump_py887", default_args = default_args) as dag:
 
     task_01 = BashOperator(task_id='task_01', bash_command="echo {{ ts_nodash }}")
     task_02 = BashOperator(task_id='task_02', bash_command="echo {{ ts_nodash }}")
