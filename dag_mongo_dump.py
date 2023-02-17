@@ -12,7 +12,7 @@ from airflow.kubernetes.secret import Secret
 default_args = {
     'owner': 'tilin',
     'depends_on_past': False,
-    'start_date' : datetime(2023, 2, 15),
+    'start_date' : datetime(2023, 2, 16),
     'schedule_interval': "45 1 * * *",
     'email': ['tilin@wish.com'],
     'email_on_failure': True,
@@ -20,7 +20,7 @@ default_args = {
     'catchup': True
 }
 
-with DAG(dag_id="dag_mongo_py888", default_args = default_args) as dag:
+with DAG(dag_id="mongo_dump_py888", default_args = default_args) as dag:
 
     task_01 = BashOperator(task_id='task_01', bash_command="echo {{ ts_nodash }}")
     task_02 = BashOperator(task_id='task_02', bash_command="echo {{ ts_nodash }}")
@@ -28,7 +28,7 @@ with DAG(dag_id="dag_mongo_py888", default_args = default_args) as dag:
     task_dump = KubernetesPodOperator(namespace='airflow',
         task_id='task_dump_py',
         cmds=["python", "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"],
-        arguments=["--date=20221230T000000",
+        arguments=["--date=20220930T000000",
         "--c_name=MerchantOrder",
         "--s3_bucket=wishpost-data",
         "--task_id=MongoDumpMerchantOrderDaily",

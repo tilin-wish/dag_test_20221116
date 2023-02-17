@@ -1,7 +1,7 @@
 mongo_dump_yaml888:
   default_args:
     owner: 'tilin'
-    start_date: 2023-02-15 
+    start_date: 2023-02-16
     #end_date: 2022-11-05
     retries: 1
     email: [
@@ -35,7 +35,7 @@ mongo_dump_yaml888:
         "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"
       ]
       arguments : [
-        "--date=20221130T000000",
+        "--date=20221030T000000",
         "--c_name=MerchantOrder",
         "--s3_bucket=wishpost-data",
         "--task_id=MongoDumpMerchantOrderDaily",
