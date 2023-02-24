@@ -29,20 +29,22 @@ mongo_dump_yaml887:
     task_dump:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       namespace: 'airflow'
-      image: 'harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4'
+      #image: 'harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4'
+      image: 'harbor.infra.wish-cn.com/wish/wishpost-airflow:d0eeda8-20230209090254_master'
       cmds: [ 
         "python", 
-        "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py"
+        "-c",
+        "print('hello')",
       ]
       arguments : [
-        "--date=20221030T000000",
-        "--c_name=MerchantOrder",
-        "--s3_bucket=wishpost-data",
-        "--task_id=MongoDumpMerchantOrderDaily",
-        "--s3_uri_prefix=qa/mongo2s3_dump/wishpost/wishpost_merchant_order",
-        "--env=be_qa",
-        "--secrets_file=/opt/vault/secrets/dev_wishpost_secrets.conf",
-        "--freq=daily",
+        # "--date=20221030T000000",
+        # "--c_name=MerchantOrder",
+        # "--s3_bucket=wishpost-data",
+        # "--task_id=MongoDumpMerchantOrderDaily",
+        # "--s3_uri_prefix=qa/mongo2s3_dump/wishpost/wishpost_merchant_order",
+        # "--env=be_qa",
+        # "--secrets_file=/opt/vault/secrets/dev_wishpost_secrets.conf",
+        # "--freq=daily",
       ]
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/wishpost_template.yaml'
       get_logs: True
