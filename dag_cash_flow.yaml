@@ -30,13 +30,7 @@ mongo_dump_yaml887:
       arguments : [
         "migrate_cash_flow"
       ]
-      envs: [
-        "PG_HOST": "wishpost-rds-snapshot.bjs.i.wish.com"
-        "PG_USERNAME": "wishpost"
-        "PG_PASSWORD": "wishpost"
-        "PG_DATABASE": "prod"
-      ]
-      #pod_template_file: '/opt/airflow/dags/repo/pod_template_files/wishpost_template.yaml'
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_account_template.yaml'
       get_logs: True
       #dependencies: [task_01, task_02]
 
