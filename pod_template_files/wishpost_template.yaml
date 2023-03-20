@@ -11,7 +11,7 @@ spec:
       command: ["python", "-c"]
       args: ["import time;time.sleep(300);print('hello world');"]
       image: "harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4"
-      imagePullPolicy: IfNotPresent
+      imagePullPolicy: Always
       ports: []
       resources:
         limits:
