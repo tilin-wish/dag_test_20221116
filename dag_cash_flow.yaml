@@ -1,4 +1,4 @@
-mongo_dump_yaml887:
+cashflow_test1:
   default_args:
     owner: 'ytao'
     start_date: 2023-03-19
@@ -9,7 +9,7 @@ mongo_dump_yaml887:
     ]
     email_on_failure: 'True'
     email_on_retry: 'True'
-    catchup: 'True'
+    catchup: 'False'
   schedule_interval: '45 1 * * *'
   concurrency: 1
   max_active_runs: 1
