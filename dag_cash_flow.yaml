@@ -1,4 +1,4 @@
-cashflow_test2:
+cashflow_test3:
   default_args:
     owner: 'ytao'
     start_date: 2023-03-19
@@ -23,9 +23,10 @@ cashflow_test2:
       namespace: 'airflow'
       #image: 'harbor.infra.wish-cn.com/wish/wishpost-airflow@sha256:089400dea49a5f7935fd42e240483ccb2f722c4fd48d6f41a8c566280d725ba4'
       #image: 'harbor.infra.wish-cn.com/wish/wishpost-airflow:d0eeda8-20230209090254_master'
-      image: "harbor.infra.wish-cn.com/wish/wishpost-payment-account@sha256:84c93beb51fbed5f6a1cb6890189b0fda0aeb334aa9f40bb90ee5a32f753989c"
+      # image: "harbor.infra.wish-cn.com/wish/wishpost-payment-account@sha256:84c93beb51fbed5f6a1cb6890189b0fda0aeb334aa9f40bb90ee5a32f753989c"
+      image: "harbor.infra.wish-cn.com/wish/wishpost-payment-account@sha256:9f268aa1eaa1ed286b03681d076df9132c3b79d6223d9b0d2dec40bb51842d7b"
       cmds: [ 
-        "./main", 
+        "./migrationtool", 
       ]
       arguments : [
         "migrate_cash_flow"
