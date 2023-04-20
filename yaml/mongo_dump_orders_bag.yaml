@@ -1,0 +1,39 @@
+mongo_dump_orders_bag_test:
+  default_args:
+    owner: 'jcui'
+    start_date: 2023-02-16
+    #end_date: 2022-11-05
+    retries: 1
+    email: [
+      'jcui@wish.com'
+    ]
+    email_on_failure: 'True'
+    email_on_retry: 'False'
+    catchup: 'True'
+  schedule_interval: '@daily'
+  concurrency: 3
+  max_active_runs: 1
+  default_view: 'tree' 
+  orientation: 'LR'  
+  description: 'mongo dump demo'
+  tasks:        
+    task_mongo_dump_orders_bag:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost/scripts/crons/easy_mongo_etl/easy_mongo2s3.py",
+      ]
+      arguments : [
+        "--date=20221030T000000",
+        "--c_name=MerchantOrder",
+        "--s3_bucket=wishpost-data",
+        "--task_id=MongoWishPostOrdersBagExtract",
+        "--s3_uri_prefix=qa/jobplatform/mongo2s3_dump/wishpost/wishpost_orders_bag",
+        "--freq=daily",
+        "--query_field=last_updated_time"
+      ]
+      pod_template_file: '/opt/airflow/dags/pod_template_files/wishpost_template.yaml'
+      get_logs: True
+      labels: 
+        task_id: "task_mongo_dump_orders_bag"
+        dag_id: "mongo_dump_orders_bag_test"
