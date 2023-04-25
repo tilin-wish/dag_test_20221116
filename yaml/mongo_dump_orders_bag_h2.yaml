@@ -1,0 +1,26 @@
+mongo_dump_orders_bag_test_hourly2:
+  default_args:
+    owner: 'jcui'
+    start_date: 2023-04-25T12:00:00
+    timezone: "Asia/Shanghai"
+    retries: 1
+    email: [
+      'tilin@wish.com'
+    ]
+    email_on_failure: 'True'
+    email_on_retry: 'False'
+    catchup: 'True'
+  schedule_interval: '@daily'
+  concurrency: 3
+  max_active_runs: 3
+  default_view: 'tree' 
+  orientation: 'LR'  
+  description: 'mongo dump demo'
+  tasks:        
+    task_mongo_dump_orders_bag:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/pod_template_files/wishpost_template.yaml'
+      get_logs: True
+      labels: 
+        task_id: "task_mongo_dump_orders_bag"
+        dag_id: "mongo_dump_orders_bag_test"

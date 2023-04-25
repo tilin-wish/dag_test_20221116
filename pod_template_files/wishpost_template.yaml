@@ -12,7 +12,7 @@ spec:
     - name: base
       command: ["python", "-c"]
       args: ["import time;time.sleep(300);print('hello world');"]
-      image: "harbor.infra.wish-cn.com/wish/wishpost/airflow:latest"
+      image: "harbor.infra.wish-cn.com/wish/wishpost/airflow:wishflow-wishpost-qa"
       imagePullPolicy: Always
       ports: []
       resources:
