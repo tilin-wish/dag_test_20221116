@@ -1,4 +1,4 @@
-mongo_dump_orders_bag_test_hourly3:
+test_hourly3:
   default_args:
     owner: 'jcui'
     start_date: 2023-04-25
