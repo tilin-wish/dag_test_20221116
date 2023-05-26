@@ -1,4 +1,4 @@
-test_pipeonce994:
+test_pipeonce993:
   default_args:
     owner: 'jcui'
     start_date: 2023-04-25T12:00:00
@@ -17,9 +17,9 @@ test_pipeonce994:
   orientation: 'LR'  
   description: 'mongo dump demo'
   tasks:        
-    task_mongo_dump_orders_bag:
+    paymentsql:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
-      pod_template_file: '/opt/airflow/dags/pod_template_files/payment_pipeline.yaml'
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
       get_logs: True
       labels: 
         task_id: "t1"

@@ -2,17 +2,17 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: wishpost-template
+  name: payment-pipeline
   namespace: airflow
   
 spec:
-  serviceAccountName: job-platform-wishpost
+  serviceAccountName: airflow-worker
 
   containers:
     - name: base
       command: ["python", "-c"]
-      args: ["import time;time.sleep(300);print('hello world');"]
-      image: "harbor.infra.wish-cn.com/wish/wishpost/airflow:wishflow-wishpost-qa"
+      args: ["import time;time.sleep(10);print('hello world');"]
+      #image: "harbor.infra.wish-cn.com/wish/wishpost/airflow:wishflow-wishpost-qa"
       image: "harbor.infra.wish-cn.com/wish/wishpost_payment_pipeline:test"
       #@sha256:0300e539017b21222b774b3d5d059a751f720b17efcd7c18254a61b62e2a42f2
       imagePullPolicy: Always
