@@ -1,0 +1,57 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wishpost-template
+  #namespace: wishflow-wishpost
+  
+spec:
+  serviceAccountName: job-platform-wishpost
+
+  containers:
+    - name: base
+      command: ["python", "-c"]
+      args: ["import time;time.sleep(300);print('hello world');"]
+      image: "harbor.infra.wish-cn.com/wish/wishpost/airflow:wishflow-wishpost-qa"
+      image: "harbor.infra.wish-cn.com/wish/wishpost_payment_pipeline:test"
+      #@sha256:0300e539017b21222b774b3d5d059a751f720b17efcd7c18254a61b62e2a42f2
+      imagePullPolicy: Always
+      ports: []
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
+         
+      # volumeMounts:
+      #   - name: credential
+      #     mountPath: '/opt/vault/secrets'
+      #     readOnly: true
+      env:
+        - name: DB_SECRETS_FILE
+          value: '/opt/vault/secrets/db_credentials'
+        - name: AIRFLOW__SMTP__SMTP_HOST
+          value: 'smtp.sendgrid.net'
+        - name: AIRFLOW__SMTP__SMTP_STARTTLS
+          value: 'True'
+        - name: AIRFLOW__SMTP__SMTP_SSL
+          value: 'False'
+        - name: AIRFLOW__SMTP__SMTP_USER
+          value: 'apikey'
+        - name: AIRFLOW__CORE__default_task_execution_timeout
+          value: '3600'
+        - name: AIRFLOW__SMTP__SMTP_MAIL_FROM
+          value: 'airflow-notifications@wish.com'  
+        # - name: AIRFLOW__SMTP__SMTP_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: wishflow-wishpost-credential
+        #       key: sendgrid_password
+        
+  restartPolicy: Never
+  # volumes:
+  #   - name: credential
+  #     secret:
+  #       secretName: wishflow-wishpost-credential
