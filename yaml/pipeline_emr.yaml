@@ -271,6 +271,7 @@ test_pipeonce988:
         "--tbl_type=refund_origin",
         "--public=True"
       ]
+      dependencies: [recon_task.from_order_raw]
     recon_task.mapping:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -305,6 +306,7 @@ test_pipeonce988:
         "--tbl_type=allocate_raw",
         "--public=True"
       ]
+      dependencies: [recon_task.mapping,recon_task.refund_origin]
     recon_task.allocate:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
