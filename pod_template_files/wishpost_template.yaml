@@ -6,7 +6,7 @@ metadata:
   #namespace: wishflow-wishpost
   
 spec:
-  serviceAccountName: job-platform-wishpost
+  serviceAccountName: airflow-worker
 
   containers:
     - name: base
