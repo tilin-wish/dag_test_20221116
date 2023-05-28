@@ -67,6 +67,7 @@ test_pipeonce988:
         "--tbl_type=refund_origin",
         "--public=True"
       ]
+      dependencies: [fpl.from_order]
     fpl.from_order:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -84,6 +85,7 @@ test_pipeonce988:
         "--tbl_type=from_order",
         "--public=False"
       ]
+      dependencies: [lcl_124.allocate, fpl.from_order_raw]
     fpl.mapping:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -101,6 +103,7 @@ test_pipeonce988:
         "--tbl_type=mapping",
         "--public=False"
       ]
+      dependencies: [fpl.from_order]
     fpl.allocate_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -118,6 +121,7 @@ test_pipeonce988:
         "--tbl_type=allocate_raw",
         "--public=True"
       ]
+      dependencies: [fpl.mapping, fpl.refund_origin]
     fpl.allocate:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -135,6 +139,7 @@ test_pipeonce988:
         "--tbl_type=allocate",
         "--public=True"
       ]
+      dependencies: [fpl.allocate_raw]
     lcl_124.from_order_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -186,6 +191,7 @@ test_pipeonce988:
         "--tbl_type=from_order",
         "--public=False"
       ]
+      dependencies: [recon_task.allocate, lcl_124.from_order_raw]
     lcl_124.mapping:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -220,6 +226,7 @@ test_pipeonce988:
         "--tbl_type=allocate_raw",
         "--public=True"
       ]
+      dependencies: [lcl_124.mapping, lcl_124.refund_origin]
     lcl_124.allocate:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -237,6 +244,7 @@ test_pipeonce988:
         "--tbl_type=allocate",
         "--public=True"
       ]
+      dependencies: [lcl_124.allocate_raw]
     recon_task.from_order_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -289,6 +297,7 @@ test_pipeonce988:
         "--tbl_type=mapping",
         "--public=False"
       ]
+      dependencies: [recon_task.from_order_raw]
     recon_task.allocate_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -324,3 +333,4 @@ test_pipeonce988:
         "--tbl_type=allocate",
         "--public=True"
       ]
+      dependencies: [recon_task.allocate_raw]
