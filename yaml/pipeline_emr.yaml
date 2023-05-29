@@ -1,7 +1,7 @@
-test_pipeonce988:
+test_pipeonce987:
   default_args:
     owner: 'tilin'
-    start_date: 2023-05-24T12:00:00
+    start_date: 2023-05-27T12:00:00
     timezone: "Asia/Shanghai"
     retries: 1
     email: [
@@ -48,7 +48,6 @@ test_pipeonce988:
         "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
         "--biz_type=fpl",
         "--tbl_type=from_order_raw",
-        "--public=False"
       ]
     fpl.refund_origin:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
@@ -83,7 +82,6 @@ test_pipeonce988:
         "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
         "--biz_type=fpl",
         "--tbl_type=from_order",
-        "--public=False"
       ]
       dependencies: [lcl_124.allocate, fpl.from_order_raw]
     fpl.mapping:
@@ -101,7 +99,6 @@ test_pipeonce988:
         "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
         "--biz_type=fpl",
         "--tbl_type=mapping",
-        "--public=False"
       ]
       dependencies: [fpl.from_order]
     fpl.allocate_raw:
@@ -155,7 +152,6 @@ test_pipeonce988:
         "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
         "--biz_type=lcl_124",
         "--tbl_type=from_order_raw",
-        "--public=False"
       ]
     lcl_124.refund_origin:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
@@ -189,7 +185,6 @@ test_pipeonce988:
         "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
         "--biz_type=lcl_124",
         "--tbl_type=from_order",
-        "--public=False"
       ]
       dependencies: [recon_task.allocate, lcl_124.from_order_raw]
     lcl_124.mapping:
@@ -207,7 +202,6 @@ test_pipeonce988:
         "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
         "--biz_type=lcl_124",
         "--tbl_type=mapping",
-        "--public=False"
       ]
     lcl_124.allocate_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
@@ -260,7 +254,6 @@ test_pipeonce988:
         "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
         "--biz_type=recon_task",
         "--tbl_type=from_order_raw",
-        "--public=False"
       ]
     recon_task.refund_origin:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
@@ -295,7 +288,6 @@ test_pipeonce988:
         "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
         "--biz_type=recon_task",
         "--tbl_type=mapping",
-        "--public=False"
       ]
       dependencies: [recon_task.from_order_raw]
     recon_task.allocate_raw:
