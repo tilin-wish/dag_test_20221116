@@ -1,4 +1,4 @@
-test_pipeonce987:
+test_pipeonce986:
   default_args:
     owner: 'tilin'
     start_date: 2023-05-27T12:00:00
@@ -170,6 +170,7 @@ test_pipeonce987:
         "--tbl_type=refund_origin",
         "--public=True"
       ]
+      dependencies: [lcl_124.from_order]
     lcl_124.from_order:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -203,6 +204,7 @@ test_pipeonce987:
         "--biz_type=lcl_124",
         "--tbl_type=mapping",
       ]
+      dependencies: [lcl_124.from_order]
     lcl_124.allocate_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -326,3 +328,168 @@ test_pipeonce987:
         "--public=True"
       ]
       dependencies: [recon_task.allocate_raw]
+    recon_task.allocation_task_checks:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "recon_task.allocation_task_checks"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=recon_task",
+        "--check=True"
+      ]
+      dependencies: [recon_task.allocate]
+    recon_task.load_success:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "recon_task.load_success"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=recon_task",
+        "--tbl_type=success",
+        "--table_name=wishpost_payment_allocation",
+        "--partition_key=yyyymmdd"
+      ]
+      dependencies: [recon_task.allocation_task_checks]
+    recon_task.load_failure:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "recon_task.load_failure"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=recon_task",
+        "--tbl_type=failure",
+        "--table_name=wishpost_payment_allocation",
+        "--partition_key=yyyymmdd"
+      ]
+      dependencies: [recon_task.allocation_task_checks]
+    fpl.allocation_task_checks:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "fpl.allocation_task_checks"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=fpl",
+        "--check=True"
+      ]
+      dependencies: [fpl.allocate]
+    fpl.load_success:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "fpl.load_success"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=fpl",
+        "--tbl_type=success",
+        "--table_name=wishpost_payment_allocation",
+        "--partition_key=yyyymmdd"
+      ]
+      dependencies: [fpl.allocation_task_checks]
+    fpl.load_failure:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "fpl.load_failure"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=fpl",
+        "--tbl_type=failure",
+        "--table_name=wishpost_payment_allocation",
+        "--partition_key=yyyymmdd"
+      ]
+      dependencies: [fpl.allocation_task_checks]
+    lcl_124.allocation_task_checks:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "lcl_124.allocation_task_checks"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=lcl_124",
+        "--check=True"
+      ]
+      dependencies: [lcl_124.allocate]
+    lcl_124.load_success:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "lcl_124.load_success"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=lcl_124",
+        "--tbl_type=success",
+        "--table_name=wishpost_payment_allocation",
+        "--partition_key=yyyymmdd"
+      ]
+      dependencies: [lcl_124.allocation_task_checks]
+    lcl_124.load_failure:
+      operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
+      pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
+      get_logs: True
+      labels: 
+        task_id: "lcl_124.load_failure"
+        dag_id: "test_pipeonce"
+      cmds: [ 
+        "python", 
+        "/home/app/wishpost_payment_pipeline/exp_entrypoint/dosql.py",
+      ]
+      arguments : [
+        "--date={{ execution_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}",
+        "--biz_type=lcl_124",
+        "--tbl_type=failure",
+        "--table_name=wishpost_payment_allocation",
+        "--partition_key=yyyymmdd"
+      ]
+      dependencies: [lcl_124.allocation_task_checks]
