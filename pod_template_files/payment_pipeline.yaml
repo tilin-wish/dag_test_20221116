@@ -44,8 +44,8 @@ spec:
           value: '3600'
         - name: AIRFLOW__SMTP__SMTP_MAIL_FROM
           value: 'airflow-notifications@wish.com'  
-        - name: DRY_RUN
-          value: 'True'
+        # - name: DRY_RUN
+        #   value: 'True'
         # - name: AIRFLOW__SMTP__SMTP_PASSWORD
         #   valueFrom:
         #     secretKeyRef:
