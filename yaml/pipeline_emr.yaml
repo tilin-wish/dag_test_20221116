@@ -1,7 +1,7 @@
 test_pipeonce983:
   default_args:
     owner: 'tilin'
-    start_date: 2023-06-02
+    start_date: 2023-06-01
     timezone: "Asia/Shanghai"
     retries: 1
     email: [
