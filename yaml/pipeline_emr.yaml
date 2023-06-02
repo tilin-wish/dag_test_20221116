@@ -1,7 +1,7 @@
-test_pipeonce985:
+test_pipeonce984:
   default_args:
     owner: 'tilin'
-    start_date: 2023-05-29T12:00:00
+    start_date: 2023-05-29
     timezone: "Asia/Shanghai"
     retries: 1
     email: [
@@ -10,13 +10,40 @@ test_pipeonce985:
     email_on_failure: 'True'
     email_on_retry: 'False'
     catchup: 'True'
-  schedule_interval: '@daily'
+  schedule_interval: '15 8 * * *'
   concurrency: 3
-  max_active_runs: 3
+  max_active_runs: 7
   default_view: 'tree' 
   orientation: 'LR'  
-  description: 'mongo dump demo'
   tasks:        
+    senseDumpPurchaseData:
+      operator: airflow.providers.http.sensors.http.HttpSensor
+      http_conn_id: default_http_conn
+      endpoint: wishflow.wishpost.bjs.i.wish.com/api/experimental/dags/wishpost_payment_dump_daily/dag_runs/{{ next_execution_date.strftime('%Y-%m-%d') }}/tasks/DumpPurchaseData
+      response_check_lambda: "lambda response: response.json().get('state') == 'success'"
+      poke_interval: 60
+      timeout: 21600 #6 hours
+    senseDumpSalesData:
+      operator: airflow.providers.http.sensors.http.HttpSensor
+      http_conn_id: default_http_conn
+      endpoint: wishflow.wishpost.bjs.i.wish.com/api/experimental/dags/wishpost_payment_dump_daily/dag_runs/{{ next_execution_date.strftime('%Y-%m-%d') }}/tasks/DumpSalesData
+      response_check_lambda: "lambda response: response.json().get('state') == 'success'"
+      poke_interval: 60
+      timeout: 21600 #6 hours
+    senseDumpHiveTaskIdData:
+      operator: airflow.providers.http.sensors.http.HttpSensor
+      http_conn_id: default_http_conn
+      endpoint: wishflow.wishpost.bjs.i.wish.com/api/experimental/dags/wishpost_payment_dump_daily/dag_runs/{{ next_execution_date.strftime('%Y-%m-%d') }}/tasks/DumpHiveTaskIdData
+      response_check_lambda: "lambda response: response.json().get('state') == 'success'"
+      poke_interval: 60
+      timeout: 21600 #6 hours
+    senseDumpReconciliationOfflineDetailData:
+      operator: airflow.providers.http.sensors.http.HttpSensor
+      http_conn_id: default_http_conn
+      endpoint: wishflow.wishpost.bjs.i.wish.com/api/experimental/dags/wishpost_payment_dump_daily/dag_runs/{{ next_execution_date.strftime('%Y-%m-%d') }}/tasks/DumpReconciliationOfflineDetailData
+      response_check_lambda: "lambda response: response.json().get('state') == 'success'"
+      poke_interval: 60
+      timeout: 21600 #6 hours
     fpl.from_order_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -33,6 +60,7 @@ test_pipeonce985:
         "--biz_type=fpl",
         "--tbl_type=from_order_raw",
       ]
+      dependencies: [senseDumpPurchaseData]
     fpl.refund_origin:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -84,7 +112,7 @@ test_pipeonce985:
         "--biz_type=fpl",
         "--tbl_type=mapping",
       ]
-      dependencies: [fpl.from_order]
+      dependencies: [senseDumpSalesData, fpl.from_order]
     fpl.allocate_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -137,6 +165,7 @@ test_pipeonce985:
         "--biz_type=lcl_124",
         "--tbl_type=from_order_raw",
       ]
+      dependencies: [senseDumpPurchaseData]
     lcl_124.refund_origin:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -241,6 +270,7 @@ test_pipeonce985:
         "--biz_type=recon_task",
         "--tbl_type=from_order_raw",
       ]
+      dependencies: [senseDumpPurchaseData, senseDumpReconciliationOfflineDetailData]
     recon_task.refund_origin:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
@@ -275,7 +305,7 @@ test_pipeonce985:
         "--biz_type=recon_task",
         "--tbl_type=mapping",
       ]
-      dependencies: [recon_task.from_order_raw]
+      dependencies: [recon_task.from_order_raw,senseDumpHiveTaskIdData]
     recon_task.allocate_raw:
       operator: airflow.providers.cncf.kubernetes.operators.kubernetes_pod.KubernetesPodOperator
       pod_template_file: '/opt/airflow/dags/repo/pod_template_files/payment_pipeline.yaml'
