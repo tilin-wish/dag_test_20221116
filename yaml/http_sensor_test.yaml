@@ -1,0 +1,25 @@
+http_sensor_996:
+  default_args:
+    owner: 'tilin'
+    start_date: 2023-05-30
+    timezone: "Asia/Shanghai"
+    retries: 1
+    email: [
+      'tilin@wish.com'
+    ]
+    email_on_failure: 'True'
+    email_on_retry: 'False'
+    catchup: 'True'
+  schedule_interval: '@daily'
+  concurrency: 3
+  max_active_runs: 3
+  default_view: 'tree' 
+  orientation: 'LR'  
+  tasks:        
+    sense_test:
+      operator: airflow.sensors.http_sensor
+      http_conn_id: your_http_connection
+      endpoint: wishflow.wishpost.bjs.i.wish.com/api/experimental/dags/wishpost_payment_dump_daily/dag_runs/2023-06-01/tasks/DumpPurchaseData
+      poke_interval: 60
+      timeout: 120
+      
